@@ -30,14 +30,9 @@ public class ChatActivity extends AppCompatActivity {
     MessagesList mMessagesList;
     private MessageInput mMessageInput;
     private MessagesListAdapter<Message> sentMessageAdapter;
-    private char generatedChar;
 
     private ImageLoader mImageLoader;
     private RecyclerView mRecyclerView;
-
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +47,6 @@ public class ChatActivity extends AppCompatActivity {
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true));
         mRecyclerView.setVisibility(View.INVISIBLE);
-        generatedChar = generateChar();
 
         sentMessageAdapter = new MessagesListAdapter<>("John", mImageLoader);
         mMessagesList.setAdapter(sentMessageAdapter);
@@ -62,22 +56,13 @@ public class ChatActivity extends AppCompatActivity {
             public boolean onSubmit(CharSequence input) {
 
                 if(!input.toString().trim().isEmpty()){
-                    String payload = input.toString() + generatedChar;
-                    byte[] encodedPayload = new byte[0];
-                    try {
-                        encodedPayload = payload.getBytes("UTF-8");
-                        Date date = Calendar.getInstance().getTime();
+                    Date date = Calendar.getInstance().getTime();
 
-                        User user = new User("John", "df", null);
-                        Message message1 = new Message("Will", input.toString(), date, user);
+                    User user = new User("John", "df", null);
+                    Message message1 = new Message("Will", input.toString(), date, user);
 
-                        sentMessageAdapter.addToStart(message1, true);
-                        processMessage("kodok");
-
-                        //Add the message to conversation history for Firebase smart reply
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    }
+                    sentMessageAdapter.addToStart(message1, true);
+                    processMessage("kodok");
 
                 } else {
                     Toast.makeText(ChatActivity.this, "You can't send empty message", Toast.LENGTH_SHORT).show();
@@ -91,10 +76,6 @@ public class ChatActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    private char generateChar(){
-        Random r = new Random();
-        return (char)(r.nextInt(26) + 'a');
-    }
 
     private void processMessage(String message){
 
