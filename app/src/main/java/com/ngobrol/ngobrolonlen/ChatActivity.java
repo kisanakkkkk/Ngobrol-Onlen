@@ -26,6 +26,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 
+import com.ngobrol.ngobrolonlen.SendTask;
+
 public class ChatActivity extends AppCompatActivity {
     MessagesList mMessagesList;
     private MessageInput mMessageInput;
@@ -59,7 +61,9 @@ public class ChatActivity extends AppCompatActivity {
                     Date date = Calendar.getInstance().getTime();
 
                     User user = new User("John", "df", null);
-                    Message message1 = new Message("Will", input.toString(), date, user);
+                    String message = input.toString();
+                    SendTask.sendMessage(message);
+                    Message message1 = new Message("Will", message, date, user);
 
                     sentMessageAdapter.addToStart(message1, true);
                     processMessage("kodok");
