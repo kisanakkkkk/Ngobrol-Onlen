@@ -1,14 +1,29 @@
 package com.ngobrol.ngobrolonlen;
 
-import static com.ngobrol.ngobrolonlen.MainActivity.out;
 
 import android.os.AsyncTask;
 
+import com.ngobrol.ngobrolonlen.Models.SocketHandler;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.Socket;
+
 public class SendTask extends AsyncTask<String, Void, Void> {
+    private Socket socket;
+    private PrintWriter out;
+
     @Override
     protected Void doInBackground(String... messages) {
-        if (out != null) {
-            out.println(messages[0]);
+        try {
+            socket = SocketHandler.getSocket();
+            out = new PrintWriter(socket.getOutputStream(), true);
+
+            if (out != null) {
+                out.println(messages[0]);
+            }
+        }catch (IOException e){
+            e.printStackTrace();
         }
         return null;
     }
@@ -16,5 +31,7 @@ public class SendTask extends AsyncTask<String, Void, Void> {
     public static void sendMessage(final String message) {
         new SendTask().execute(message);
     }
+
+
 }
 

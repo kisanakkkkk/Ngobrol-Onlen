@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.ngobrol.ngobrolonlen.Models.SocketHandler;
 import com.stfalcon.chatkit.commons.ImageLoader;
 import com.stfalcon.chatkit.messages.MessageInput;
 import com.stfalcon.chatkit.messages.MessagesList;
@@ -21,12 +22,15 @@ import com.stfalcon.chatkit.messages.MessagesListAdapter;
 import com.ngobrol.ngobrolonlen.Models.Message;
 import com.ngobrol.ngobrolonlen.Models.User;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.Socket;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
-
-import com.ngobrol.ngobrolonlen.SendTask;
 
 public class ChatActivity extends AppCompatActivity {
     MessagesList mMessagesList;
@@ -35,6 +39,9 @@ public class ChatActivity extends AppCompatActivity {
 
     private ImageLoader mImageLoader;
     private RecyclerView mRecyclerView;
+
+    private Socket socket;
+    ReceiveThread receive;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +60,7 @@ public class ChatActivity extends AppCompatActivity {
         sentMessageAdapter = new MessagesListAdapter<>("John", mImageLoader);
         mMessagesList.setAdapter(sentMessageAdapter);
 
+        init();
         mMessageInput.setInputListener(new MessageInput.InputListener() {
             @Override
             public boolean onSubmit(CharSequence input) {
@@ -66,8 +74,6 @@ public class ChatActivity extends AppCompatActivity {
                     Message message1 = new Message("Will", message, date, user);
 
                     sentMessageAdapter.addToStart(message1, true);
-                    processMessage("kodok");
-
                 } else {
                     Toast.makeText(ChatActivity.this, "You can't send empty message", Toast.LENGTH_SHORT).show();
                 }
@@ -81,6 +87,17 @@ public class ChatActivity extends AppCompatActivity {
     }
 
 
+    private void init(){
+        socket = SocketHandler.getSocket();
+
+        if(socket == null){
+            Log.d("null", "coi");
+        }
+
+        receive = new ReceiveThread();
+        Log.d("nyampe sini", "boi");
+        receive.start();
+    }
     private void processMessage(String message){
 
         User user = new User("Paul", "df", null);
@@ -107,5 +124,27 @@ public class ChatActivity extends AppCompatActivity {
 
     public boolean onCreateOptionsMenu(Menu menu) {
         return true;
+    }
+
+    public class ReceiveThread extends Thread {
+        @Override
+        public void run() {
+            try {
+                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                String receivedMessage;
+                while ((receivedMessage = in.readLine()) != null) {
+                    // Read and display incoming messages
+                    final String finalMessage  = receivedMessage;
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            processMessage(finalMessage);
+                        }
+                    });
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
