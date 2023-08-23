@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-
+import com.ngobrol.ngobrolonlen.Models.SocketHandler;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -37,22 +37,32 @@ public class MainActivity extends AppCompatActivity {
         chat.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
+                validateAndConnect();
 
-                Toast.makeText(MainActivity.this, "Asiap santuy", Toast.LENGTH_SHORT).show();
-
-                Log.d(hostname.getText().toString(), port.getText().toString());
-                connect = new ConnectTask();
-                connect.connectToServer(hostname, port);
-
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run(){
-                        Intent intent = new Intent(MainActivity.this, ChatActivity.class);
-                        startActivity(intent);
-                    }
-                }, 3000);
             }
         });
 
+    }
+    private void validateAndConnect(){
+        if(hostname.getText().toString().trim().isEmpty() || port.getText().toString().trim().isEmpty()){
+            Toast.makeText(MainActivity.this, "Hostname and port cannot be empty", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Log.d(hostname.getText().toString(), port.getText().toString());
+        connect = new ConnectTask();
+        connect.connectToServer(hostname, port);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if(SocketHandler.getSocket() != null && SocketHandler.getSocket().isConnected()) {
+                    Toast.makeText(MainActivity.this, "Connected", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(MainActivity.this, ChatActivity.class);
+                    startActivity(intent);
+                }
+                else{
+                    Toast.makeText(MainActivity.this, "Failed to Connect", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, 1000);
     }
 }

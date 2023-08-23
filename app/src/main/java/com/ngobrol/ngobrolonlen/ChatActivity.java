@@ -96,10 +96,7 @@ public class ChatActivity extends AppCompatActivity {
     }
     private void processMessage(String message){
         User user = new User("Paul", "df", null);
-
         Date date = Calendar.getInstance().getTime();
-
-
         Message message1 = new Message("Doe", message, date, user);
 
         sentMessageAdapter.addToStart(message1, true);
@@ -107,11 +104,7 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-//            try {
-//                socket.close();
-//            }catch(IOException e){
-//                e.printStackTrace();
-//            }
+            disconnectSocket();
             Log.d("ayam", "kodok");
             finish();
             return true;
@@ -140,6 +133,24 @@ public class ChatActivity extends AppCompatActivity {
                         }
                     });
                 }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Handle back button press
+        disconnectSocket();
+        super.onBackPressed();
+    }
+
+
+    private void disconnectSocket() {
+        if (socket != null && socket.isConnected()) {
+            try {
+                socket.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }

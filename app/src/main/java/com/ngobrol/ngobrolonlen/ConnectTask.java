@@ -27,7 +27,10 @@ public class ConnectTask extends AsyncTask<Void, Void, Void> {
             Log.d("port", String.valueOf(portName));
 
             socket = new Socket(hostnameString, portName);
-            SocketHandler.setSocket(socket);
+            if(socket != null && socket.isConnected()) {
+                Log.d("socket", "notnull");
+                SocketHandler.setSocket(socket);
+            }
 
         } catch (IOException e) {
             Log.d("apakah ke sini", "sini");
