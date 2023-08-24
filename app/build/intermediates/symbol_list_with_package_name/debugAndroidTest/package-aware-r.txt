@@ -1,0 +1,3 @@
+com.ngobrol.ngobrolonlen.test
+style WhiteBackgroundDialogTheme
+style WhiteBackgroundTheme

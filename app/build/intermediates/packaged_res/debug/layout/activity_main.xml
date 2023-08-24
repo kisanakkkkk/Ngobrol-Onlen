@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraint"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/chatButton"
+        android:layout_width="256dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="161dp"
+        android:text="start chatting!"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/port" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="174dp"
+        android:layout_marginBottom="45dp"
+        android:text="Main Activity Coy!"
+        app:layout_constraintBottom_toTopOf="@+id/hostname"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/hostname"
+        android:layout_width="256dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="28dp"
+        android:ems="10"
+        android:hint="hostname"
+        android:inputType="textPersonName"
+        android:text=""
+        app:layout_constraintBottom_toTopOf="@+id/port"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <EditText
+        android:id="@+id/port"
+        android:layout_width="253dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="105dp"
+        android:ems="10"
+        android:hint="port"
+        android:inputType="number"
+        app:layout_constraintBottom_toTopOf="@+id/chatButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/hostname" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
